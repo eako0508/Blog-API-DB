@@ -1,17 +1,24 @@
 
 const express = require('express');
-const router = express.Router();
 const morgan = require('morgan');
-const bodyParser = require('body-parser');
-
-const {ShoppingList, Recipes} = require('./models');
-
-const jsonParser = bodyParser.json();
+//const router = express.Router();
 const app = express();
+
+const blogRouter = require('./blogRouter');
 
 // log the http layer
 app.use(morgan('common'));
 
+
+
+
+
+
+app.listen(process.env.PORT || 8080, () => {
+  console.log(`Your app is listening on port ${process.env.PORT || 8080}`);
+});
+//BlogPosts
+/*
 // we're going to add some items to ShoppingList
 // so there's some data to look at
 ShoppingList.create('beans', 2);
@@ -128,18 +135,16 @@ app.put('/recipes/:id', jsonParser, (req, res) => {
     console.error(msg_id);
     res.status(400).send(msg_id); 
   }
-  //update
-  Recipes.update(req.body);
-  /*
   Recipes.update({
     "id": req.body.id,
     "name": req.body.name,
     "ingredients": req.body.ingredients
   });
-  */
+  
   res.status(204).end();
 });
 
 app.listen(process.env.PORT || 8080, () => {
   console.log(`Your app is listening on port ${process.env.PORT || 8080}`);
 });
+*/
