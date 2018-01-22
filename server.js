@@ -9,7 +9,7 @@ const blogRouter = require('./blogRouter');
 // log the http layer
 app.use(morgan('common'));
 
-
+app.use('/blog-posts', blogRouter);
 
 
 
