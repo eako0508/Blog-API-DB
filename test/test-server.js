@@ -35,5 +35,22 @@ describe('Blog post', function(){
 			});
 	});
 
+	it('should create new post on POST', function(){
+		test_entry = {title: 'just my day', content: 'Jackpot', author: 'anonymous'};
+
+		return chai.request(app)
+			.post('/blog-posts')
+			.send(test_entry)
+			.then(function(res){
+				expect(res).to.be.status(201);
+				expect(res).to.be.json;
+				expect(res.body).to.be.a('object');
+				expect(res.body).to.include.keys('title', 'content', 'author', 'id', 'publishDate');
+				expect(res.body.id).to.not.equal(null);
+				expect(res.body).to.deep.equal(Object.assign(test_entry, {id: res.body.id, publishDate: res.body.publishDate}))
+			});
+	});
+
+	
 
 });
