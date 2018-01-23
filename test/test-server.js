@@ -1,11 +1,11 @@
 const chai = require('chai');
-const chaiHttp = require('chaiHttp');
+const chaiHttp = require('chai-Http');
 
 const expect = chai.expect;
 
-const {apa, runServer, closeServer} = require('../server');
+chai.use(chaiHttp);
 
-
+const {app, runServer, closeServer} = require('../server');
 
 describe('Blog post', function(){
 
@@ -22,11 +22,11 @@ describe('Blog post', function(){
 			.then(function(res){
 				expect(res).to.be.status(200);
 				expect(res).to.be.json;
-				expect(res.body).to.be.a('object');
-				expect(res.body).to.include('title', 'content', 'author');
-				expect(res.body).to.be.at.least(1);
+				expect(res.body).to.be.a('array');
+				//expect(res.body).to.include('title', 'content', 'author');
+				expect(res.body.length).to.be.at.least(1);
 			});
 	});
 
-	
+
 });

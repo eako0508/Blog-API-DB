@@ -15,6 +15,10 @@ Use Express router and modularize routes to /blog-posts.
 Add a couple of blog posts on server load so you'll automatically have
 some data to look at when the server starts.
  */
+
+
+ BlogPosts.create('fizz','buzz','boohoo');
+
 //get all info
 router.get('/', (req,res)=>{
   res.json(BlogPosts.get());
