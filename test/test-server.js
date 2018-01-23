@@ -8,7 +8,6 @@ const expect = chai.expect;
 chai.use(chaiHttp);
 
 
-
 describe('Blog post', function(){
 
 	before(function(){
@@ -31,13 +30,11 @@ describe('Blog post', function(){
 					expect(element).to.be.a('object');
 					expect(element).to.include.keys(requried_field);
 				})
-				
 			});
 	});
 
 	it('should create new post on POST', function(){
 		const test_entry = {title: 'just my day', content: 'Jackpot', author: 'anonymous'};
-
 		return chai.request(app)
 			.post('/blog-posts')
 			.send(test_entry)
@@ -52,7 +49,6 @@ describe('Blog post', function(){
 	});
 
 	it('should update pre-existing blog post with PUT', function(){
-		
 		const test_entry = {
 			title: 'fozz', 
 			content: 'bozz', 
@@ -75,4 +71,15 @@ describe('Blog post', function(){
 			})
 	});
 
+	it('should delete an entry with DELETE', function(){
+		return chai.request(app)
+			.get('/blog-posts')
+			.then(function(res){
+				return chai.request(app)
+					.delete(`/blog-posts/${res.body[0].id}`);
+			})
+			.then(function(res){
+				expect(res).to.be.status(204);
+			});
+	})
 });
