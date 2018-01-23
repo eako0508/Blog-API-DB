@@ -36,7 +36,7 @@ describe('Blog post', function(){
 	});
 
 	it('should create new post on POST', function(){
-		test_entry = {title: 'just my day', content: 'Jackpot', author: 'anonymous'};
+		const test_entry = {title: 'just my day', content: 'Jackpot', author: 'anonymous'};
 
 		return chai.request(app)
 			.post('/blog-posts')
@@ -51,6 +51,28 @@ describe('Blog post', function(){
 			});
 	});
 
-	
+	it('should update pre-existing blog post with PUT', function(){
+		
+		const test_entry = {
+			title: 'fozz', 
+			content: 'bozz', 
+			author: 'bizzhizz'
+		};
+		return chai.request(app)
+			.get('/blog-posts')
+			.then(function(res){
+				test_entry.publishDate = res.body[0].publishDate;
+				test_entry.id = res.body[0].id;
+				return chai.request(app)
+					.put(`/blog-posts/${test_entry.id}`)
+					.send(test_entry);
+			})
+			.then(function(res){
+				expect(res).to.have.status(200);
+				expect(res).to.be.json;
+				expect(res.body).to.be.a('object');
+				expect(res.body).to.deep.equal(test_entry);
+			})
+	});
 
 });
