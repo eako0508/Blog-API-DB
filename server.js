@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 //app.use('/blog-posts', blogRouter);
 
-app.get('/blog-posts', (req,res) =>{
+app.get('/blogposts', (req,res) =>{
   BlogPosts
     .find()
     .limit(10)
@@ -27,7 +27,7 @@ app.get('/blog-posts', (req,res) =>{
     });
 });
 
-app.get('/blog-posts/:id', (req,res)=>{
+app.get('/blogposts/:id', (req,res)=>{
   BlogPosts
     .findById(req.params.id)
     .then(blogs => res.json(blogs))
@@ -37,7 +37,7 @@ app.get('/blog-posts/:id', (req,res)=>{
     });
 });
 
-app.put('/blog-posts/:id', (req,res)=>{
+app.put('/blogposts/:id', (req,res)=>{
   if(!(req.params.id && req.body.id && req.params.id === req.body.id)){
     const message = (
       `Request path id (${req.params.id}) and request body id ` +
@@ -57,7 +57,7 @@ app.put('/blog-posts/:id', (req,res)=>{
     .findByIdAndUpdate(req.params.id, {$set: updatedEntry})
 });
 
-app.post('/blog-posts', (req,res)=>{
+app.post('/blogposts', (req,res)=>{
   const requiredFields = ['title', 'content', 'author', 'publishDate'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
@@ -81,7 +81,7 @@ app.post('/blog-posts', (req,res)=>{
     });
 });
 
-app.delete('/blog-posts/:id', (req,res)=>{
+app.delete('/blogposts/:id', (req,res)=>{
   BlogPosts
     .findByIdAndRemove(req.params.id)
     .then(blog => res.status(204).end())
