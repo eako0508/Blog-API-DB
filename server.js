@@ -12,15 +12,16 @@ const app = express();
 app.use(morgan('common'));
 app.use(bodyParser.json());
 
-//app.use('/blog-posts', blogRouter);
-
 app.get('/blogposts', (req,res) =>{
   BlogPosts
     .find()
     .limit(10)
     .then(blogs => {
-      res.json(blogs);
-    })
+		res.json({
+			blogs: blogs.map(
+				(blogs) => blogs.serialize())
+		});
+	})
     .catch(err=>{
       console.error(err);
       res.status(500).json({ message: 'Internal server error'});
