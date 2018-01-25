@@ -39,7 +39,7 @@ router.post('/', jsonParser, (req,res) => {
       req.body.title,
       req.body.content,
       req.body.author,
-      req.body.publishDate
+      req.body.publishDate //<----
   );
   res.status(201).json(result);
 });

@@ -1,22 +1,24 @@
 const uuid = require('uuid');
+const mongoose = require('mongoose');
 
-// This module provides volatile storage, using a `BlogPost`
-// model. We haven't learned about databases yet, so for now
-// we're using in-memory storage. This means each time the app stops, our storage
-// gets erased.
-
-// Don't worry too much about how BlogPost is implemented.
-// Our concern in this example is with how the API layer
-// is implemented, and getting it to use an existing model.
-
+const blogSchema = mongoose.Schema({
+  id: {type: String, required: true},
+  title: {type: String, required: true},
+  content: {type: String, required: true},
+  author: {type: String, requried: true},
+  publishDate: {type: Date}
+});
 
 function StorageException(message) {
    this.message = message;
    this.name = "StorageException";
 }
 
+const BlogPost = mongoose.model('BlogPosts', blogSchema);
+
 const BlogPosts = {
   create: function(title, content, author, publishDate) {
+    
     const post = {
       id: uuid.v4(),
       title: title,
@@ -24,7 +26,12 @@ const BlogPosts = {
       author: author,
       publishDate: publishDate || Date.now()
     };
-    this.posts.push(post);
+    
+    BlogPost.create(post).catch(err =>{
+      console.error(err);
+      return err;
+    });
+
     return post;
   },
   get: function(id=null) {
@@ -33,11 +40,16 @@ const BlogPosts = {
     if (id !== null) {
       return this.posts.find(post => post.id === id);
     }
+    /*
     // return posts sorted (descending) by
     // publish date
     return this.posts.sort(function(a, b) {
       return b.publishDate - a.publishDate
     });
+    */
+
+
+
   },
   delete: function(id) {
     const postIndex = this.posts.findIndex(
