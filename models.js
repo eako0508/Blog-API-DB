@@ -1,3 +1,5 @@
+'use strict'
+
 const mongoose = require('mongoose');
 
 const blogSchema = mongoose.Schema({
@@ -6,17 +8,21 @@ const blogSchema = mongoose.Schema({
   author: {type: String, requried: true},
   publishDate: {type: Date}
 });
+/*
+blogSchema.virtual('ids').get(function(){
+  const idObj = this.id.sort((a,b) => {return b.publishDate - a.publishDate});
+});
+*/
+const BlogPost = mongoose.model('BlogPosts', blogSchema);
 
+module.exports = {BlogPosts: createBlogPostsModel()};
+
+
+/*
 function StorageException(message) {
    this.message = message;
    this.name = "StorageException";
 }
-
-blogSchema.virtual('ids').get(function(){
-  const idObj = this.id.sort((a,b) => {return b.publishDate - a.publishDate});
-});
-
-const BlogPost = mongoose.model('BlogPosts', blogSchema);
 
 const BlogPosts = {
   create: function(title, content, author, publishDate) {
@@ -79,6 +85,6 @@ function createBlogPostsModel() {
   storage.posts = [];
   return storage;
 }
+*/
 
 
-module.exports = {BlogPosts: createBlogPostsModel()};

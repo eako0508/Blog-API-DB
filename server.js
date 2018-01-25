@@ -57,6 +57,39 @@ app.put('/blog-posts/:id', (req,res)=>{
     .findByIdAndUpdate(req.params.id, {$set: updatedEntry})
 });
 
+app.post('/blog-posts', (req,res)=>{
+  const requiredFields = ['title', 'content', 'author', 'publishDate'];
+  for (let i = 0; i < requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+  BlogPosts
+    .create({
+      title: req.body.title,
+      content: req.body.content,
+      author: req.body.author,
+      publishDate: Date.now();
+    })
+    .then(blog => res.status(201).json(blog))
+    .catch(err=>{
+      console.error(err);
+      res.status(500).json({message: Internal server error});
+    });
+});
+
+app.delete('/blog-posts/:id', (req,res)=>{
+  BlogPosts
+    .findByIdAndRemove(req.params.id)
+    .then(blog => res.status(204).end())
+    .catch(err =>{
+      res.status(500).json({message: Internal server error});
+    });
+});
+
 let server;
 
 function runServer(databaseUrl = DATABASE_URL, port = PORT) {
