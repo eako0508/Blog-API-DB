@@ -72,12 +72,12 @@ app.post('/blog-posts', (req,res)=>{
       title: req.body.title,
       content: req.body.content,
       author: req.body.author,
-      publishDate: Date.now();
+      publishDate: Date.now()
     })
     .then(blog => res.status(201).json(blog))
     .catch(err=>{
       console.error(err);
-      res.status(500).json({message: Internal server error});
+      res.status(500).json({message: 'Internal server error'});
     });
 });
 
@@ -86,7 +86,7 @@ app.delete('/blog-posts/:id', (req,res)=>{
     .findByIdAndRemove(req.params.id)
     .then(blog => res.status(204).end())
     .catch(err =>{
-      res.status(500).json({message: Internal server error});
+      res.status(500).json({message: 'Internal server error'});
     });
 });
 

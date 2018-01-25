@@ -13,9 +13,9 @@ blogSchema.virtual('ids').get(function(){
   const idObj = this.id.sort((a,b) => {return b.publishDate - a.publishDate});
 });
 */
-const BlogPost = mongoose.model('BlogPosts', blogSchema);
+const BlogPosts = mongoose.model('BlogPosts', blogSchema);
 
-module.exports = {BlogPosts: createBlogPostsModel()};
+module.exports = {BlogPosts}
 
 
 /*
