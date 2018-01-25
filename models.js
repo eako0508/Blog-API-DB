@@ -1,8 +1,6 @@
-const uuid = require('uuid');
 const mongoose = require('mongoose');
 
 const blogSchema = mongoose.Schema({
-  id: {type: String, required: true},
   title: {type: String, required: true},
   content: {type: String, required: true},
   author: {type: String, requried: true},
@@ -14,52 +12,56 @@ function StorageException(message) {
    this.name = "StorageException";
 }
 
+blogSchema.virtual('ids').get(function(){
+  const idObj = this.id.sort((a,b) => {return b.publishDate - a.publishDate});
+});
+
 const BlogPost = mongoose.model('BlogPosts', blogSchema);
 
 const BlogPosts = {
   create: function(title, content, author, publishDate) {
     
     const post = {
-      id: uuid.v4(),
       title: title,
       content: content,
       author: author,
       publishDate: publishDate || Date.now()
     };
-    
     BlogPost.create(post).catch(err =>{
       console.error(err);
       return err;
     });
-
     return post;
   },
   get: function(id=null) {
-    // if id passed in, retrieve single post,
-    // otherwise send all posts.
+    const res = {};
     if (id !== null) {
-      return this.posts.find(post => post.id === id);
-    }
-    /*
-    // return posts sorted (descending) by
-    // publish date
-    return this.posts.sort(function(a, b) {
-      return b.publishDate - a.publishDate
-    });
-    */
-
-
-
+      BlogPost
+       .find()
+       .limit(10)
+       .then(function(obj){
+        res.json(obj);
+        return res;
+       })
+       .catch(err => {
+          console.error(err);
+          return err;
+       });
+    }  
   },
   delete: function(id) {
-    const postIndex = this.posts.findIndex(
-      post => post.id === id);
-    if (postIndex > -1) {
-      this.posts.splice(postIndex, 1);
-    }
+    BlogPost
+      .findByIdAndRemove(id)
+      .catch(err => {
+        console.error(err);
+        return err;
+      });
   },
   update: function(updatedPost) {
+
     const {id} = updatedPost;
+    BlogPost.findByIdAndUpdate(id, )
+    
     const postIndex = this.posts.findIndex(
       post => post.id === updatedPost.id);
     if (postIndex === -1) {
