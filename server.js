@@ -47,7 +47,7 @@ app.put('/blogposts/:id', (req,res)=>{
   }
   
   const updatedEntry = {};
-  const updateFields = ['title', 'content', 'author', 'publishDate'];
+  const updateFields = ['title', 'content', 'author'];
   updateFields.forEach(field =>{
     if(field in req.body){
       updatedEntry[field] = req.body[field];
@@ -55,10 +55,12 @@ app.put('/blogposts/:id', (req,res)=>{
   });
   BlogPosts
     .findByIdAndUpdate(req.params.id, {$set: updatedEntry})
+	.then(blog=>res.status(204).end())
+	.catch(err=>res.status(500).json({message: 'Internal serve error'}));
 });
 
 app.post('/blogposts', (req,res)=>{
-  const requiredFields = ['title', 'content', 'author', 'publishDate'];
+  const requiredFields = ['title', 'content', 'author'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
