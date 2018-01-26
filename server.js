@@ -31,7 +31,7 @@ app.get('/posts', (req,res) =>{
 app.get('/posts/:id', (req,res)=>{
   BlogPosts
     .findById(req.params.id)
-    .then(blogs => res.json(blogs))
+	.then(blogs => res.json(blogs.serialize()))
     .catch(err=>{
       console.error(err);
       res.status(500).json({ message: 'Internal server error'});
@@ -64,6 +64,20 @@ app.post('/posts', (req,res)=>{
   const requiredFields = ['title', 'content', 'author'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
+	/*
+	if (field == 'author'){
+    const requiredName = ['firstName', 'lastName'];
+		for(let j=0;j<requiredName.length;j++){
+			const fieldName = requiredName[j];
+			console.log(fieldName);
+			if( !(fieldName in req.body) ){
+				const message = `Missing \`${fieldName}\` in request body`;
+				console.error(message);
+				return res.status(400).send(message);
+			}
+		}
+	}
+	*/
     if (!(field in req.body)) {
       const message = `Missing \`${field}\` in request body`;
       console.error(message);
@@ -77,7 +91,7 @@ app.post('/posts', (req,res)=>{
       author: req.body.author,
       publishDate: Date.now()
     })
-    .then(blog => res.status(201).json(blog))
+    .then(blog => res.status(201).json(blog.serialize()))
     .catch(err=>{
       console.error(err);
       res.status(500).json({message: 'Internal server error'});
