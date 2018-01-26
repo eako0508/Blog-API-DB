@@ -55,8 +55,8 @@ app.put('/posts/:id', (req,res)=>{
     }
   });
   BlogPosts
-    .findByIdAndUpdate(req.params.id, {$set: updatedEntry})
-	.then(blog=>res.status(204).end())
+    .findByIdAndUpdate(req.params.id, {$set: updatedEntry},{new:true})
+	.then(blog=>res.status(200).json(blog.serialize()))
 	.catch(err=>res.status(500).json({message: 'Internal serve error'}));
 });
 
